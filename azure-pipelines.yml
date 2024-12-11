@@ -11,3 +11,16 @@ jobs:
         displayName: Unit tests (Pester)
       - powershell: Invoke-Pester -Output Detailed -TagFilter "Integration"
         displayName: Integration tests (Pester)
+      - powershell: |
+          $config = New-PesterConfiguration
+          $config.CodeCoverage.OutputFormat = 'CoverageGutters'
+          $config.CodeCoverage.OutputPath = 'cov.xml'
+          $config.CodeCoverage.OutputEncoding = 'UTF8'
+          $config.CodeCoverage.Path = "src"
+          $config.CodeCoverage.Enabled = $true
+          Invoke-Pester -Configuration $config
+        displayName: Code coverage (Pester)
+      - task: PublishCodeCoverageResults@2
+        displayName: 'Publish code coverage results'
+        inputs:
+          summaryFileLocation: '$(System.DefaultWorkingDirectory)/cov.xml'
