@@ -1,0 +1,13 @@
+trigger:
+- main
+
+pool:
+  name: Linux-MSI-local
+
+jobs:
+  - job: Build
+    steps:
+      - powershell: Invoke-Pester -Output Detailed -ExcludeTagFilter "Integration"
+        displayName: Unit tests (Pester)
+      - powershell: Invoke-Pester -Output Detailed -TagFilter "Integration"
+        displayName: Integration tests (Pester)
