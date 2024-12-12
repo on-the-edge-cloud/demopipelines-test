@@ -8,8 +8,8 @@ Describe 'Get-Pokemon' {
         $pikachu.name | Should -Be 'pikachu'
     }
 
-    # It 'Given no parameters, it should return pikachu' -Tag 'Integration' {
-    #     $pikachu = Get-Pokemon -pokemonName 'ditto'
-    #     $pikachu.name | Should -Be 'ditto'
-    # }
+    It 'Given no parameters, it should return pikachu' -Tag 'Integration' {
+        $pikachu = Get-Pokemon -pokemonName 'ditto'
+        $pikachu.name | Should -Be 'ditto'
+    }
 }
