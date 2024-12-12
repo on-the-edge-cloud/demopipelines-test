@@ -7,18 +7,30 @@ pool:
 jobs:
   - job: Build
     steps:
-      - powershell: Invoke-Pester -Output Detailed -ExcludeTagFilter "Integration"
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: Invoke-Pester -Output Detailed -ExcludeTagFilter "Integration"
+          pwsh: true
         displayName: Unit tests (Pester)
-      - powershell: Invoke-Pester -Output Detailed -TagFilter "Integration"
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: Invoke-Pester -Output Detailed -TagFilter "Integration"
+          pwsh: true
         displayName: Integration tests (Pester)
-      - powershell: |
-          $config = New-PesterConfiguration
-          $config.CodeCoverage.OutputFormat = 'JaCoCo'
-          $config.CodeCoverage.OutputPath = 'cov.xml'
-          $config.CodeCoverage.OutputEncoding = 'UTF8'
-          $config.CodeCoverage.Path = "src"
-          $config.CodeCoverage.Enabled = $true
-          Invoke-Pester -Configuration $config
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          pwsh: true
+          script: |
+              $config = New-PesterConfiguration
+              $config.CodeCoverage.OutputFormat = 'JaCoCo'
+              $config.CodeCoverage.OutputPath = 'cov.xml'
+              $config.CodeCoverage.OutputEncoding = 'UTF8'
+              $config.CodeCoverage.Path = "src"
+              $config.CodeCoverage.Enabled = $true
+              Invoke-Pester -Configuration $config
         displayName: Code coverage (Pester)
       - task: PublishCodeCoverageResults@2
         displayName: 'Publish code coverage results'
